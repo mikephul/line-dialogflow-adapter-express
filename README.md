@@ -2,7 +2,7 @@
 
 Line-Dialogflow Adapter helps pass events from [Line Messaging API](https://developers.line.me/en/docs/messaging-api/overview/) to [Dialogflow](https://dialogflow.com/). Normally, the events such as [Follow event](https://developers.line.me/en/docs/messaging-api/reference/#follow-event) and [Postback event](https://developers.line.me/en/docs/messaging-api/reference/#postback-event) are not supported out-of-the-box by Dialogflow yet. Hence, the bot can only send text query to get the response from Dialogflow. This code seeks to translate [Line webhook events](https://developers.line.me/en/docs/messaging-api/reference/#webhook-event-objects) to Dialogflow custom events. Click [here](http://qr-official.line.me/L/oVd9bvJ4qG.png) to see the bot in action.
 
-__*Note:__ This code will deploy the adapter on [Express](http://expressjs.com/).
+__*Note:__ This code will deploy the adapter on [Express](http://expressjs.com/). If you want to deploy on Firebase Functions see [here](https://github.com/mikephul/line-dialogflow-adapter-firebase).
 
 
 ## Quickstart
