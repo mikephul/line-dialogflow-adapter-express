@@ -11,9 +11,14 @@ __*Note:__ This code will deploy the adapter on [Express](http://expressjs.com/)
 
 2. Enable the [Dialogflow API](https://console.cloud.google.com/flows/enableapi?apiid=dialogflow.googleapis.com) in Google Cloud console for your project.
 
-3. Obtain the channel access token of your Line bot from [Line Developer console](https://developers.line.me/console/).
+3. Create new gcloud [service account](https://console.cloud.google.com/projectselector/iam-admin/serviceaccounts) for your project and [activate](https://cloud.google.com/sdk/gcloud/reference/auth/activate-service-account) it to allow request to Dialogflow:
+```
+gcloud auth activate-service-account [ACCOUNT] --key-file=KEY_FILE
+```
 
-4. Set up the config in `.env` with
+4. Obtain the channel access token of your Line bot from [Line Developer console](https://developers.line.me/console/).
+
+5. Set up the config in `.env` with
 ```
 LINE_CHANNEL_ACCESS_TOKEN=
 DIALOGFLOW_PROJECT_ID=
@@ -21,20 +26,20 @@ DIALOGFLOW_LANGUAGE_CODE=
 PORT=
 ```
 
-5. Deploy express with
+6. Deploy express with
 ```
 cd line-dialogflow-adapter-express
 npm install
 npm start
 ```
 
-6. Go to the [Line Channel Setting](https://developers.line.me/console/) of your bot. 
+7. Go to the [Line Channel Setting](https://developers.line.me/console/) of your bot. 
 	- Enable webhook and add the Webhook URL to point to your web server. 
 	- Disable Auto-reply messages and Greeting messages
   
 __*Tips:__ If you are developing locally. You can use [ngrok](https://ngrok.com/) to tunnel your request to local machine and use ngrok provided url as webhook.
 
-7. Go to Dialogflow console. For `Default Welcome Intent`, add `LINE_FOLLOW` event to greet your audience from Dialogflow!   
+8. Go to Dialogflow console. For `Default Welcome Intent`, add `LINE_FOLLOW` event to greet your audience from Dialogflow!   
 
 ## Line webhook event to Dialogflow event
 - __Message event__ is simply sent to Dialogflow as text. 
