@@ -14,6 +14,19 @@ export const dialogflowClientConfig: DialogflowConfig = {
   languageCode: process.env.DIALOGFLOW_LANGUAGE_CODE as string,
 };
 
+export const firebaseConfig = {
+  apiKey: process.env.FIREBASE_APIKEY as string,
+  authDomain: process.env.FIREBASE_AUTHDOMAIN as string,
+  databaseURL: process.env.FIREBASE_DATABASE_URL as string,
+  projectId: process.env.FIREBASE_PROJECT_ID as string,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET as string,
+  messagingSenderId: process.env.FIREBASE_MESSENGING_SENDER_ID as string
+}
+
+export const chatbaseConfig = {
+  apiKey: process.env.CHATBASE_KEY as string
+}
+
 // Port for Express
 export const DEFAULT_PORT = 3000;
 

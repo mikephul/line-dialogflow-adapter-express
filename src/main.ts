@@ -4,22 +4,12 @@ import express from 'express';
 import {get} from 'lodash';
 import {Client} from '@line/bot-sdk';
 
-import {lineClientConfig, dialogflowClientConfig, DEFAULT_PORT} from './config';
+import {lineClientConfig, dialogflowClientConfig, firebaseConfig, chatbaseConfig, DEFAULT_PORT} from './config';
 import {DialogflowClient} from './dialogflow-client';
 import {EventHandler} from './event-handler';
 import * as firebase from 'firebase';
 
 config();
-
-// Initialize Firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyD3cA5zIBCHQQ0jwvqYzwHku1GefaVIXfc",
-  authDomain: "ega-hr-b5c2c.firebaseapp.com",
-  databaseURL: "https://ega-hr-b5c2c.firebaseio.com",
-  projectId: "ega-hr-b5c2c",
-  storageBucket: "ega-hr-b5c2c.appspot.com",
-  messagingSenderId: "807190162588"
-};
 firebase.initializeApp(firebaseConfig);
 
 const app = express();
@@ -28,6 +18,8 @@ app.use(bodyParser.json());
 const lineClient = new Client(lineClientConfig);
 console.log(lineClientConfig);
 console.log(dialogflowClientConfig);
+console.log(chatbaseConfig);
+
 const dialogflowClient = new DialogflowClient(dialogflowClientConfig);
 const webhookHandler = new EventHandler(lineClient, dialogflowClient);
 
@@ -61,7 +53,6 @@ app.post('/', async(req, res) => {
   }
   //Handle event as normal.
   await webhookHandler.handleEvent(event);
-  res.send('');
 
   /**
      * Context Saving from Firebase
@@ -71,7 +62,7 @@ app.post('/', async(req, res) => {
   let contexts = await dialogflowClient.listContext(userId);
   contexts = contexts.map((x) => ({"name": x.name, "lifespanCount": x.lifespanCount}));
   console.log('contexts', contexts);
-  
+
   //Save it into Firebase for future.
   firebase
     .database()
