@@ -9,21 +9,21 @@ __*Note:__ This code will deploy the adapter on [Express](http://expressjs.com/)
 
 1. Create a bot in [Dialogflow](https://dialogflow.com/). Remember your `project-id` and `language`. No need to set up the Integrations for Line.
 
-2. Enable the [Dialogflow API](https://console.cloud.google.com/flows/enableapi?apiid=None
+2. Enable the [Dialogflow API](https://console.cloud.google.com/flows/enableapi?apiid=dialogflow.googleapis.com) in Google Cloud console for your project.
 
 3. Create new gcloud [service account](https://console.cloud.google.com/projectselector/iam-admin/serviceaccounts) for your project and [activate](https://cloud.google.com/sdk/gcloud/reference/auth/activate-service-account) it to allow request to Dialogflow:
 ```
-gcloud auth activate-service-account [ACCOUNT] --key-file=None
+gcloud auth activate-service-account [ACCOUNT] --key-file=KEY_FILE
 ```
 
 4. Obtain the channel access token of your Line bot from [Line Developer console](https://developers.line.me/console/).
 
 5. Set up the config in `.env` with
 ```
-LINE_CHANNEL_ACCESS_TOKEN=None
-DIALOGFLOW_PROJECT_ID=None
-DIALOGFLOW_LANGUAGE_CODE=None
-PORT=None
+LINE_CHANNEL_ACCESS_TOKEN=
+DIALOGFLOW_PROJECT_ID=
+DIALOGFLOW_LANGUAGE_CODE=
+PORT=
 ```
 
 6. Deploy express with
@@ -62,7 +62,7 @@ __*Tips:__ If you are developing locally. You can use [ngrok](https://ngrok.com/
    },
    "timestamp":1513669370317,
    "postback":{  
-      "data":"action=None
+      "data":"action=<EVENT NAME>&storeid=1234",
       "params":{  
          "datetime":"2017-12-25T01:00"
       }
