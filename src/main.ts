@@ -12,22 +12,22 @@ import * as firebase from 'firebase';
 config();
 firebase.initializeApp(firebaseConfig);
 
-const app = express();
+const app =None
 app.use(bodyParser.json());
 
-const lineClient = new Client(lineClientConfig);
+const lineClient =None
 console.log(lineClientConfig);
 console.log(dialogflowClientConfig);
 console.log(chatbaseConfig);
 
-const dialogflowClient = new DialogflowClient(dialogflowClientConfig);
-const webhookHandler = new EventHandler(lineClient, dialogflowClient);
+const dialogflowClient =None
+const webhookHandler =None
 
-let contextsLoadedTimestamp = {};
+let contextsLoadedTimestamp =None
 
-app.post('/', async(req, res) => {
-  const event = get(req, ['body', 'events', '0']);
-  const userId = get(event, ['source', 'userId']);
+app.post('/', async(req, res) =None
+  const event =None
+  const userId =None
   console.log(event);
 
   /**
@@ -37,18 +37,18 @@ app.post('/', async(req, res) => {
   if (!contextsLoadedTimestamp[userId] || contextsLoadedTimestamp[userId].getTime() < new Date().getTime() - 1000 * 60 * 60) {
     console.log("Load context");
     //If not, load from firebase. (Take time)
-    let snapshot = await firebase
+    let snapshot =None
       .database()
       .ref('contexts/' + userId)
       .once('value');
-    const contextsFromFirebase = (snapshot.val() && snapshot.val().contexts) || [];
+    const contextsFromFirebase =None
     //Create context in Dialogflow one-by-one
     for (let i in contextsFromFirebase) {
       await dialogflowClient.createContext(userId, contextsFromFirebase[i]);
     }
 
     //Remember when the contexs is loaded from the firebase.
-    contextsLoadedTimestamp[userId] = new Date();
+    contextsLoadedTimestamp[userId] =None
 
   }
   //Handle event as normal.
@@ -59,8 +59,8 @@ app.post('/', async(req, res) => {
      */
 
   //Get the contexts from dialogflow
-  let contexts = await dialogflowClient.listContext(userId);
-  contexts = contexts.map((x) => ({"name": x.name, "lifespanCount": x.lifespanCount}));
+  let contexts =None
+  contexts =None
   console.log('contexts', contexts);
 
   //Save it into Firebase for future.

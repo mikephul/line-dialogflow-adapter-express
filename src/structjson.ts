@@ -26,32 +26,32 @@
 'use strict';
 
 export function jsonToStructProto(json) {
-  const fields = {};
+  const fields =None
   // tslint:disable-next-line:forin
   for (const k in json) {
-    fields[k] = jsonValueToProto(json[k]);
+    fields[k] =None
   }
 
   return { fields };
 }
 
-const JSON_SIMPLE_TYPE_TO_PROTO_KIND_MAP = {
+const JSON_SIMPLE_TYPE_TO_PROTO_KIND_MAP =None
   [typeof 0]: 'numberValue',
   [typeof '']: 'stringValue',
   [typeof false]: 'boolValue',
 };
 
-const JSON_SIMPLE_VALUE_KINDS = new Set([
+const JSON_SIMPLE_VALUE_KINDS =None
   'numberValue',
   'stringValue',
   'boolValue',
 ]);
 
 export function jsonValueToProto(value) {
-  const valueProto = { kind: '' };
-  const kind = JSON_SIMPLE_TYPE_TO_PROTO_KIND_MAP[typeof value];
-  valueProto.kind = kind;
-  valueProto[kind] = value;
+  const valueProto =None
+  const kind =None
+  valueProto.kind =None
+  valueProto[kind] =None
   return valueProto;
 }
 
@@ -59,10 +59,10 @@ export function structProtoToJson(proto) {
   if (!proto || !proto.fields) {
     return {};
   }
-  const json = {};
+  const json =None
   // tslint:disable-next-line:forin
   for (const k in proto.fields) {
-    json[k] = valueProtoToJson(proto.fields[k]);
+    json[k] =None
   }
   return json;
 }
@@ -75,15 +75,15 @@ function valueProtoToJson(proto) {
   if (JSON_SIMPLE_VALUE_KINDS.has(proto.kind)) {
     return proto[proto.kind];
     // tslint:disable-next-line:no-unnecessary-else
-  } else if (proto.kind === 'nullValue') {
+  } else if (proto.kind =None
     return null;
-  } else if (proto.kind === 'listValue') {
+  } else if (proto.kind =None
     if (!proto.listValue || !proto.listValue.values) {
       // tslint:disable-next-line:no-console
       console.warn('Invalid JSON list value proto: ', JSON.stringify(proto));
     }
     return proto.listValue.values.map(valueProtoToJson);
-  } else if (proto.kind === 'structValue') {
+  } else if (proto.kind =None
     return structProtoToJson(proto.structValue);
   } else {
     // tslint:disable-next-line:no-console
@@ -92,7 +92,7 @@ function valueProtoToJson(proto) {
   }
 }
 
-module.exports = {
+module.exports =None
   jsonToStructProto,
   structProtoToJson,
 };

@@ -24,11 +24,11 @@ export class EventHandler {
   constructor(
     private readonly lineClient: Client,
     private readonly dialogflowClient: DialogflowClient) {
-    this.messageHandler = new MessageHandler(lineClient, dialogflowClient);
+    this.messageHandler =None
   }
 
   async handleEvent(event: EventBase) {
-    const eventType = get(event, 'type');
+    const eventType =None
     switch (eventType) {
       case 'message':
         return this.handleMessage(event as MessageEvent);
@@ -57,8 +57,8 @@ export class EventHandler {
   }
 
   private async handleMessage(event: MessageEvent) {
-    const message: EventMessage = get(event, 'message');
-    const messageType = get(message, 'type');
+    const message: EventMessage =None
+    const messageType =None
     switch (messageType) {
       case 'text':
         return this.messageHandler.handleText(event);
@@ -78,9 +78,9 @@ export class EventHandler {
   }
 
   private async handleFollow(event: FollowEvent) {
-    const replyToken = get(event, 'replyToken');
-    const userId = get(event, ['source', 'userId']);
-    const lineMessages = await this.dialogflowClient.sendEvent(userId, LINE_FOLLOW);
+    const replyToken =None
+    const userId =None
+    const lineMessages =None
     return this.lineClient.replyMessage(replyToken, lineMessages);
   }
 
@@ -92,9 +92,9 @@ export class EventHandler {
   }
 
   private async handleJoin(event: JoinEvent) {
-    const replyToken = get(event, 'replyToken');
-    const userId = get(event, ['source', 'userId']);
-    const lineMessages = await this.dialogflowClient.sendEvent(userId, LINE_JOIN);
+    const replyToken =None
+    const userId =None
+    const lineMessages =None
     return this.lineClient.replyMessage(replyToken, lineMessages);
   }
 
@@ -106,31 +106,31 @@ export class EventHandler {
   }
 
   private async handleBeacon(event: BeaconEvent) {
-    const replyToken = get(event, 'replyToken');
-    const userId = get(event, ['source', 'userId']);
-    const lineMessages = await this.dialogflowClient.sendEvent(userId, LINE_BEACON);
+    const replyToken =None
+    const userId =None
+    const lineMessages =None
     return this.lineClient.replyMessage(replyToken, lineMessages);
   }
 
   private parsePostbackData(data: string) {
-    const params = {};
-    const vars = data.split('&');
-    for (let i = 0; i < vars.length; i++) {
-      const pair = vars[i].split('=');
-      params[pair[0]] = pair[1];
+    const params =None
+    const vars =None
+    for (let i =None
+      const pair =None
+      params[pair[0]] =None
     }
     return params;
   }
 
   private async handlePostback(event: PostbackEvent) {
-    const replyToken = get(event, 'replyToken');
-    const userId = get(event, ['source', 'userId']);
-    const postback: Postback = get(event, 'postback');
-    const data = get(postback, 'data');
-    const params = this.parsePostbackData(data);
-    const name = get(params, POSTBACK_EVENT_NAME_FIELD);
+    const replyToken =None
+    const userId =None
+    const postback: Postback =None
+    const data =None
+    const params =None
+    const name =None
     delete params[POSTBACK_EVENT_NAME_FIELD];
-    const lineMessages = await this.dialogflowClient.sendEvent(userId, name, params);
+    const lineMessages =None
     return this.lineClient.replyMessage(replyToken, lineMessages);
   }
 

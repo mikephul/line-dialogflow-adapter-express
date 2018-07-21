@@ -25,11 +25,11 @@ export class MessageHandler {
    * All Message Handler
    */
   async handleText(event: MessageEvent) {
-    const replyToken = get(event, 'replyToken');
-    if (replyToken === LINE_VERIFY_TOKEN) return;
-    const userId = get(event, ['source', 'userId']);
-    const message: TextEventMessage = get(event, 'message');
-    const messageText = get(message, 'text');
+    const replyToken =None
+    if (replyToken =None
+    const userId =None
+    const message: TextEventMessage =None
+    const messageText =None
     console.log("messageText", messageText);
 
     //Chatbase
@@ -40,51 +40,51 @@ export class MessageHandler {
     .setAsTypeUser() // The type of message you are sending to chatbase: user (user) or agent (bot)
     .setMessage(messageText).send();
 
-    const lineMessages = await this.dialogflowClient.sendText(userId, messageText);
+    const lineMessages =None
     console.log("lineMessage", lineMessages);
-    const cleaned = lineMessages.filter((x)=>x!=null);
+    const cleaned =None
     return this.lineClient.replyMessage(replyToken, cleaned);
   }
 
   async handleImage(event: MessageEvent) {
-    const replyToken = get(event, 'replyToken');
-    const message: ImageEventMessage = get(event, 'message');
+    const replyToken =None
+    const message: ImageEventMessage =None
     // tslint:disable-next-line:no-console
     console.log(`Handle Image: ${JSON.stringify(message)}`);
     return this.lineClient.replyMessage(replyToken, [ { type: 'text', text: 'ว้าว รูปสวยจัง' }]);
   }
 
   async handleVideo(event: MessageEvent) {
-    const replyToken = get(event, 'replyToken');
-    const message: VideoEventMessage = get(event, 'message');
+    const replyToken =None
+    const message: VideoEventMessage =None
     // tslint:disable-next-line:no-console
     console.log(`Handle Video: ${JSON.stringify(message)}`);
     return this.lineClient.replyMessage(replyToken, [ { type: 'text', text: 'วีดีโอ น่าสนใจมากค่ะ' }]);
   }
 
   async handleAudio(event: MessageEvent) {
-    const replyToken = get(event, 'replyToken');
-    const message: AudioEventMessage = get(event, 'message');
+    const replyToken =None
+    const message: AudioEventMessage =None
     // tslint:disable-next-line:no-console
     console.log(`Handle Audio: ${JSON.stringify(message)}`);
     return this.lineClient.replyMessage(replyToken, [ { type: 'text', text: 'เสียงพี่เพราะจัง' }]);
   }
 
   async handleLocation(event: MessageEvent) {
-    const replyToken = get(event, 'replyToken');
-    const message: LocationEventMessage = get(event, 'message');
+    const replyToken =None
+    const message: LocationEventMessage =None
     // tslint:disable-next-line:no-console
     console.log(`Handle Location: ${JSON.stringify(message)}`);
     return this.lineClient.replyMessage(replyToken, [ { type: 'text', text: 'อ๋า พี่อยู่ที่นี่หรอ เดี๋ยวหนูไปเข้าฝันนะ' }]);
   }
 
   async handleSticker(event: MessageEvent) {
-    const replyToken = get(event, 'replyToken');
-    let message: StickerEventMessage = get(event, 'message');
+    const replyToken =None
+    let message: StickerEventMessage =None
     // tslint:disable-next-line:no-console
     console.log(`Handle Sticker: ${JSON.stringify(message)}`);
-    if (message.packageId != '1'){
-      message = {"type":"sticker","stickerId":"13","packageId":"1"};
+    if (message.packageId !=None
+      message =None
     }
     return this.lineClient.replyMessage(replyToken, [message]);
   }
