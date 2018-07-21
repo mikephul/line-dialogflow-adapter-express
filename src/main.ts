@@ -14,11 +14,14 @@ const app = express();
 app.use(bodyParser.json());
 
 const lineClient = new Client(lineClientConfig);
+console.log(lineClientConfig);
+console.log(dialogflowClientConfig);
 const dialogflowClient = new DialogflowClient(dialogflowClientConfig);
 const webhookHandler = new EventHandler(lineClient, dialogflowClient);
 
 app.post('/', async (req, res) => {
   const event = get(req, ['body', 'events', '0']);
+  console.log(event);
   await webhookHandler.handleEvent(event);
   res.send('');
 });

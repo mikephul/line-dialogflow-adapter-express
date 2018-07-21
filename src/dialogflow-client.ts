@@ -12,6 +12,7 @@ export class DialogflowClient {
   private readonly languageCode: string;
 
   constructor(config: DialogflowConfig) {
+    console.log("DF", config);
     this.sessionClient = new dialogflow.SessionsClient();
     this.projectId = config.projectId;
     this.languageCode = config.languageCode;
