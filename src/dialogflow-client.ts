@@ -14,15 +14,15 @@ export class DialogflowClient {
 
   constructor(config: DialogflowConfig) {
     console.log("DF", config);
-    this.sessionClient =None
-    this.contextsClient =None
-    this.projectId =None
-    this.languageCode =None
+    this.sessionClient = new dialogflow.SessionsClient();
+    this.contextsClient = new dialogflow.ContextsClient();
+    this.projectId = config.projectId;
+    this.languageCode = config.languageCode;
   }
 
   public async sendText(sessionId: string, text: string) {
-    const sessionPath =None
-    const req =None
+    const sessionPath = this.sessionClient.sessionPath(this.projectId, sessionId);
+    const req = {
       session: sessionPath,
       queryInput: {
         text: {
@@ -31,13 +31,13 @@ export class DialogflowClient {
         },
       },
     };
-    const messages =None
+    const messages = await this.getDialogflowMessages(req);
     return this.dialogflowMessagesToLineMessages(messages);
   }
 
-  async sendEvent(sessionId: string, name: string, parameters =None
-    const sessionPath =None
-    const req =None
+  async sendEvent(sessionId: string, name: string, parameters = {}) {
+    const sessionPath = this.sessionClient.sessionPath(this.projectId, sessionId);
+    const req = {
       session: sessionPath,
       queryInput: {
         event: {
@@ -47,59 +47,59 @@ export class DialogflowClient {
         },
       },
     };
-    const messages =None
+    const messages = await this.getDialogflowMessages(req);
     return this.dialogflowMessagesToLineMessages(messages);
   }
 
   public async listContext(sessionId:string){
-    const sessionPath =None
-    const request =None
+    const sessionPath = this.contextsClient.sessionPath(this.projectId, sessionId);
+    const request = {
       parent: sessionPath
     }
     return this.contextsClient
       .listContexts(request)
-      .then(responses =None
+      .then(responses => {
         return responses[0];
       })
-      .catch(err =None
+      .catch(err => {
         console.error('Failed to list contexts:', err);
       });
   }
 
   public async createContext(sessionId:string, AcontextFromFirebase){
-    const sessionPath =None
+    const sessionPath = this.contextsClient.sessionPath(this.projectId, sessionId);
     console.log("AcontextFromFirebase", AcontextFromFirebase);
-    const request =None
+    const request = {
       parent: sessionPath,
       context: AcontextFromFirebase
     }
 
     return this.contextsClient
       .createContext(request)
-      .then(responses =None
+      .then(responses => {
         return responses[0];
       })
-      .catch(err =None
+      .catch(err => {
         console.error('Failed to create contexts:', err);
       });
   }
   
 
   private dialogflowMessagesToLineMessages(dialogflowMessages) {
-    const lineMessages: Message[] =None
-    for (let i =None
-      const messageType =None
+    const lineMessages: Message[] = [];
+    for (let i = 0; i < dialogflowMessages.length; i++) {
+      const messageType = get(dialogflowMessages[i], 'message');
       let message: Message;
-      if (messageType =None
-        message =None
+      if (messageType === 'text') {
+        message = {
           type: 'text',
           text: get(dialogflowMessages[i], ['text', 'text', '0']),
         };
         lineMessages.push(message);
-      } else if (messageType =None
-        let payload =None
-        payload =None
-        message =None
+      } else if (messageType === 'payload') {
+        let payload = get(dialogflowMessages[i], ['payload']);
+        payload = structProtoToJson(payload);
+        message = get(payload, 'line');
         lineMessages.push(message);
       }
     }
@@ -107,8 +107,8 @@ export class DialogflowClient {
   }
 
   private async getDialogflowMessages(req) {
-    const res =None
-    const result =None
+    const res = await this.sessionClient.detectIntent(req);
+    const result = get(res, ['0', 'queryResult']);
     return get(result, 'fulfillmentMessages');
   }
 

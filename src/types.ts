@@ -1,4 +1,4 @@
-export type DialogflowConfig =None
+export type DialogflowConfig = {
   projectId: string,
   languageCode: string,
 };

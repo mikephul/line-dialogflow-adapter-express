@@ -12,22 +12,22 @@ import * as firebase from 'firebase';
 config();
 firebase.initializeApp(firebaseConfig);
 
-const app =None
+const app = express();
 app.use(bodyParser.json());
 
-const lineClient =None
+const lineClient = new Client(lineClientConfig);
 console.log(lineClientConfig);
 console.log(dialogflowClientConfig);
 console.log(chatbaseConfig);
 
-const dialogflowClient =None
-const webhookHandler =None
+const dialogflowClient = new DialogflowClient(dialogflowClientConfig);
+const webhookHandler = new EventHandler(lineClient, dialogflowClient);
 
-let contextsLoadedTimestamp =None
+let contextsLoadedTimestamp = {};
 
-app.post('/', async(req, res) =None
-  const event =None
-  const userId =None
+app.post('/', async(req, res) => {
+  const event = get(req, ['body', 'events', '0']);
+  const userId = get(event, ['source', 'userId']);
   console.log(event);
 
   /**
@@ -37,18 +37,18 @@ app.post('/', async(req, res) =None
   if (!contextsLoadedTimestamp[userId] || contextsLoadedTimestamp[userId].getTime() < new Date().getTime() - 1000 * 60 * 60) {
     console.log("Load context");
     //If not, load from firebase. (Take time)
-    let snapshot =None
+    let snapshot = await firebase
       .database()
       .ref('contexts/' + userId)
       .once('value');
-    const contextsFromFirebase =None
+    const contextsFromFirebase = (snapshot.val() && snapshot.val().contexts) || [];
     //Create context in Dialogflow one-by-one
     for (let i in contextsFromFirebase) {
       await dialogflowClient.createContext(userId, contextsFromFirebase[i]);
     }
 
     //Remember when the contexs is loaded from the firebase.
-    contextsLoadedTimestamp[userId] =None
+    contextsLoadedTimestamp[userId] = new Date();
 
   }
   //Handle event as normal.
@@ -59,8 +59,8 @@ app.post('/', async(req, res) =None
      */
 
   //Get the contexts from dialogflow
-  let contexts =None
-  contexts =None
+  let contexts = await dialogflowClient.listContext(userId);
+  contexts = contexts.map((x) => ({"name": x.name, "lifespanCount": x.lifespanCount}));
   console.log('contexts', contexts);
 
   //Save it into Firebase for future.
