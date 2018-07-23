@@ -8,11 +8,14 @@ import { DialogflowConfig } from './types';
 export class DialogflowClient {
 
   private readonly sessionClient: any;
+  private readonly contextsClient: any;
   private readonly projectId: string;
   private readonly languageCode: string;
 
   constructor(config: DialogflowConfig) {
+    console.log("DF", config);
     this.sessionClient = new dialogflow.SessionsClient();
+    this.contextsClient = new dialogflow.ContextsClient();
     this.projectId = config.projectId;
     this.languageCode = config.languageCode;
   }
@@ -47,6 +50,40 @@ export class DialogflowClient {
     const messages = await this.getDialogflowMessages(req);
     return this.dialogflowMessagesToLineMessages(messages);
   }
+
+  public async listContext(sessionId:string){
+    const sessionPath = this.contextsClient.sessionPath(this.projectId, sessionId);
+    const request = {
+      parent: sessionPath
+    }
+    return this.contextsClient
+      .listContexts(request)
+      .then(responses => {
+        return responses[0];
+      })
+      .catch(err => {
+        console.error('Failed to list contexts:', err);
+      });
+  }
+
+  public async createContext(sessionId:string, AcontextFromFirebase){
+    const sessionPath = this.contextsClient.sessionPath(this.projectId, sessionId);
+    console.log("AcontextFromFirebase", AcontextFromFirebase);
+    const request = {
+      parent: sessionPath,
+      context: AcontextFromFirebase
+    }
+
+    return this.contextsClient
+      .createContext(request)
+      .then(responses => {
+        return responses[0];
+      })
+      .catch(err => {
+        console.error('Failed to create contexts:', err);
+      });
+  }
+  
 
   private dialogflowMessagesToLineMessages(dialogflowMessages) {
     const lineMessages: Message[] = [];
